@@ -10,6 +10,8 @@ use File::Basename;
 use File::Path ();
 use Plack::Util ();
 use File::ShareDir ();
+use File::Find ();
+use File::Copy ();
 use Module::CPANfile 0.9020;
 require Jasmine;
 
@@ -67,7 +69,18 @@ sub mkpath {
 }
 
 sub write_assets {
-    
+    my ($self) = @_;
+    my $dir = File::ShareDir::dist_dir('Jasmine');
+    my $public_dir = File::Spec->catdir($dir, 'public');
+    File::Find::find(
+	sub {
+	    return if -d;
+	    my $file = $File::Find::name;
+	    $file =~ s|$public_dir/||;
+	    my $target = "public/$file";
+	    $self->mkpath(dirname($target)) unless dirname($target);
+	    print "$_\n";
+	}, $public_dir);
 }
 
 1;

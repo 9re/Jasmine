@@ -36,9 +36,13 @@ sub main {
     my $module = shift @ARGV or pod2usage(0);
     my $skelton = Jasmine::Setup::Skelton->new(module => $module);
     print Dumper $skelton;
-    my $dir = File::ShareDir::module_dir('Jasmine');
-    print `find $dir`;
-    # 
+    
+    my $dist = $skelton->{dist};
+    mkdir $dist or die "Cannot mkdir '$dist': $!";
+    chdir $dist or die $!;
+    $skelton->write_assets;
+    #
+
     exit(0);
 }
 
