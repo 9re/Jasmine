@@ -11,7 +11,7 @@ use File::Path ();
 use Plack::Util ();
 use File::ShareDir ();
 use Module::CPANfile 0.9020;
-use Jasmine;
+require Jasmine;
 
 sub new {
     my $class = shift;
@@ -57,6 +57,13 @@ sub infof {
     print "[$caller] ";
     @_==1 ? print(@_) : printf(@_);
     print "\n";
+}
+
+sub mkpath {
+    my ($self, $path) = @_;
+    Carp::croak("path should not be ref") if ref $path;
+    infof("mkpath: $path");
+    File::Path::mkpath($path);
 }
 
 sub write_assets {

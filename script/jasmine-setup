@@ -7,54 +7,40 @@ use File::Path qw/mkpath/;
 use Getopt::Long;
 use Pod::Usage;
 use Text::Xslate;
-use Data::Section::Simple qw(get_data_section);
-use File::ShareDir qw/dist_file/;
+use File::ShareDir qw//;
 use File::Copy;
 use MIME::Base64;
 use Encode;
 use File::Basename;
-
-require Kossy;
+use Jasmine;
+use Jasmine::Setup::Skelton;
+use Data::Dumper;
 
 GetOptions(
     'help' => \my $help,
     'version' => \my $version
 ) or pod2usage(0);
-pod2usage(0) if $help;
+pod2usage(1) if $help;
 &show_version if $version;
 
 &main;
 
 sub show_version {
-    use Jasmine;
+    require Jasmine;
     print "Perl: $]\n";
     print "Jasmine: $Jasmine::VERSION\n";
-    
     exit(0);
 }
 
 sub main {
+    my $module = shift @ARGV or pod2usage(0);
+    my $skelton = Jasmine::Setup::Skelton->new(module => $module);
+    print Dumper $skelton;
+    my $dir = File::ShareDir::module_dir('Jasmine');
+    print `find $dir`;
+    # 
     exit(0);
 }
-
-sub _mkpath {
-    my $d = shift;
-    print "mkdir $d\n";
-    mkpath $d;
-}
-
-my $module = shift @ARGV or pod2usage(0);
-my @pkg  = split /::/, $module;
-my $dist = join "-", @pkg;
-my $path = join "/", @pkg;
-
-my $tx = Text::Xslate->new(syntax => 'TTerse');
-
-mkdir $dist or die $!;
-chdir $dist or die $!;
-_mkpath "lib/$path";
-_mkpath "views";
-_mkpath "t";
 
 my @share_files = qw!
 public/css/bootstrap-responsive.min.css
@@ -69,23 +55,7 @@ public/js/jquery.min.js
 foreach my $file ( @share_files ) {
     print "writing $file\n";
     _mkpath( dirname($file) ) if ! -d dirname($file);
-    copy dist_file('Jasmine',$file), $file;
-}
-
-my $files = get_data_section();
-my $args = {
-    module => $module,
-    path => $path,
-    dist => $dist,
-    myver => $Kossy::VERSION,
-};
-foreach my $fkey ( keys %{$files} ) {
-    my $path = $tx->render_string($fkey, $args);
-    my $content = $tx->render_string($files->{$fkey}, $args);
-    $content = encode_utf8($content);
-    print "writing $path\n";
-    open(my $fh, '>', $path);
-    print $fh $content
+#    copy dist_file('Jasmine',$file), $file;
 }
 
 =head1 SYNOPSIS
