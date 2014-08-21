@@ -69,6 +69,47 @@ sub mkpath {
     File::Path::mkpath($path);
 }
 
+sub render_string {
+    my $self = shift;
+    my $template = shift;
+    my %args = @_==1 ? %{$_[0]} : @_;
+    return $self->{xslate}->render_string($template, {%$self, %args});
+}
+
+sub render_file {
+    my ($self, $dstname, $filename, $params) = @_;
+    Carp::croak("filename should not be reference") if ref $filename;
+    $dstname =~ s/<<([^>]+)>>/$self->{lc($1)} or die "$1 is not defined. But you want to use $1 in filename."/ge;
+
+    my $content = $self->{xslate}->render($filename, {%$self, $params ? %$params : () });
+    $self->write_file_raw($dstname, $content);
+}
+
+sub write_file {
+    my ($self, $filename, $template) = (shift, shift, shift);
+    Carp::croak("filename should not be reference") if ref $filename;
+
+    $filename =~ s/<<([^>]+)>>/$self->{lc($1)} or die "$1 is not defined. But you want to use $1 in filename."/ge;
+
+    my $content = $self->render_string($template, @_);
+    $self->write_file_raw($filename, $content);
+}
+
+sub write_file_raw {
+    my ($self, $filename, $content, $input_mode) = @_;
+    Carp::croak("filename should not be reference") if ref $filename;
+    $input_mode ||= '>:encoding(utf-8)';
+
+    infof("writing $filename");
+
+    my $dirname = dirname($filename);
+    File::Path::mkpath($dirname) if $dirname;
+
+    open my $ofh, $input_mode, $filename or die "Cannot open file: $filename: $!";
+    print {$ofh} $content;
+    close $ofh;
+}
+
 sub write_assets {
     my ($self) = @_;
     $self->copy_shared_files('public');
