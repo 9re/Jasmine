@@ -43,8 +43,8 @@ sub main {
     $skelton->write_assets;
     # copy customized Kossy
     $skelton->copy_shared_files('extlib');
-
-    $self->render_file('lib/<<PATH>>.pm', 'lib/__PATH__.pm');
+    $skelton->render_file('app.psgi', 'app.psgi');
+    $skelton->render_file('lib/<<PATH>>.pm', 'lib/__PATH__.pm');
     #
 
     exit(0);
