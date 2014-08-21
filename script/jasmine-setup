@@ -18,8 +18,24 @@ require Kossy;
 
 GetOptions(
     'help' => \my $help,
+    'version' => \my $version
 ) or pod2usage(0);
-pod2usage(1) if $help;
+pod2usage(0) if $help;
+&show_version if $version;
+
+&main;
+
+sub show_version {
+    use Jasmine;
+    print "Perl: $]\n";
+    print "Jasmine: $Jasmine::VERSION\n";
+    
+    exit(0);
+}
+
+sub main {
+    exit(0);
+}
 
 sub _mkpath {
     my $d = shift;
@@ -74,7 +90,7 @@ foreach my $fkey ( keys %{$files} ) {
 
 =head1 SYNOPSIS
 
-    % kossy-setup MyApp
+    % jasmine-setup MyApp
 
 =cut
 

@@ -55,5 +55,8 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01"
+   "version" : "0.01",
+   "x_contributors" : [
+      "Taro Kobayashi <9re.3000@gmail.com>"
+   ]
 }
