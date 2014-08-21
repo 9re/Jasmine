@@ -10,7 +10,7 @@ use Plack::Session::State::Cookie;
 
 my $root_dir = File::Basename::dirname(__FILE__);
 
-my $app = JasmineTest::Web->psgi($root_dir);
+my $app = <: $module :>::Web->psgi($root_dir);
 builder {
     enable 'Debug'; # load defaults
     enable 'Debug::DBITrace', level => 2;
