@@ -71,8 +71,13 @@ sub mkpath {
 
 sub write_assets {
     my ($self) = @_;
+    $self->copy_shared_files('public');
+}
+
+sub copy_shared_files {
+    my ($self, $target_dir) = @_;
     my $dir = File::ShareDir::dist_dir('Jasmine');
-    my $public_dir = File::Spec->catdir($dir, 'public');
+    my $public_dir = File::Spec->catdir($dir, $target_dir);
     my @files = ();
     File::Find::find(
 	sub {
@@ -83,7 +88,7 @@ sub write_assets {
 	}, $public_dir);
 
     foreach my $file(@files) {
-	my $dest = "public/$file";
+	my $dest = "$target_dir/$file";
 	my $dirname = dirname($dest);
 	$self->mkpath($dirname) unless -d $dirname;
 	File::Copy::copy("$public_dir/", $dest);

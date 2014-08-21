@@ -41,6 +41,8 @@ sub main {
     mkdir $dist or die "Cannot mkdir '$dist': $!";
     chdir $dist or die $!;
     $skelton->write_assets;
+    # copy customized Kossy
+    $skelton->copy_shared_files('extlib');
     #
 
     exit(0);
