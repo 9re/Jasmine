@@ -13,6 +13,7 @@ use File::ShareDir ();
 use File::Find ();
 use File::Copy ();
 use Module::CPANfile 0.9020;
+use Data::Dumper;
 require Jasmine;
 
 sub new {
@@ -72,15 +73,21 @@ sub write_assets {
     my ($self) = @_;
     my $dir = File::ShareDir::dist_dir('Jasmine');
     my $public_dir = File::Spec->catdir($dir, 'public');
+    my @files = ();
     File::Find::find(
 	sub {
 	    return if -d;
 	    my $file = $File::Find::name;
 	    $file =~ s|$public_dir/||;
-	    my $target = "public/$file";
-	    $self->mkpath(dirname($target)) unless dirname($target);
-	    print "$_\n";
+	    push @files, "$file";
 	}, $public_dir);
+
+    foreach my $file(@files) {
+	my $dest = "public/$file";
+	my $dirname = dirname($dest);
+	$self->mkpath($dirname) unless -d $dirname;
+	File::Copy::copy("$public_dir/", $dest);
+    }
 }
 
 1;

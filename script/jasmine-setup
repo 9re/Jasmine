@@ -46,22 +46,6 @@ sub main {
     exit(0);
 }
 
-my @share_files = qw!
-public/css/bootstrap-responsive.min.css
-public/css/bootstrap.min.css
-public/favicon.ico
-public/img/glyphicons-halflings-white.png
-public/img/glyphicons-halflings.png
-public/js/bootstrap.min.js
-public/js/jquery.min.js
-!;
-
-foreach my $file ( @share_files ) {
-    print "writing $file\n";
-    _mkpath( dirname($file) ) if ! -d dirname($file);
-#    copy dist_file('Jasmine',$file), $file;
-}
-
 =head1 SYNOPSIS
 
     % jasmine-setup MyApp
