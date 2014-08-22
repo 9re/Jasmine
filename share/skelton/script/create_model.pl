@@ -30,7 +30,9 @@ my $tx = Text::Xslate->new(syntax => 'TTerse');
 foreach my $fkey ( keys %{$files} ) {
     my $path = $tx->render_string($fkey, $args);
     my $content = $tx->render_string($files->{$fkey}, $args);
-    print "$path\n$content";
+    print "writing $path\n";
+    open(my $fh, '>:encoding(utf-8)', $path);
+    print $fh $content;
 }
 
 =head1 SYNOPSIS
