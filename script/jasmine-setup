@@ -40,6 +40,7 @@ sub main {
 
     # prepare skelton classes
     $skelton->render_file('app.psgi', 'app.psgi');
+    $skelton->render_file('script/create_model.pl', 'script/create_model.pl');
     $skelton->render_file('lib/<<PATH>>.pm', 'lib/__PATH__.pm');
     $skelton->render_file('lib/<<PATH>>/Web.pm', 'lib/__PATH__/Web.pm');
     $skelton->render_file('lib/<<PATH>>/Container.pm', 'lib/__PATH__/Container.pm');
