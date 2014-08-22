@@ -110,11 +110,6 @@ sub write_file_raw {
     close $ofh;
 }
 
-sub write_assets {
-    my ($self) = @_;
-    $self->copy_shared_files('public');
-}
-
 sub copy_shared_files {
     my ($self, $target_dir) = @_;
     my $dir = File::ShareDir::dist_dir('Jasmine');

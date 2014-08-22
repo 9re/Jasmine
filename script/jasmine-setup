@@ -40,9 +40,11 @@ sub main {
     my $dist = $skelton->{dist};
     mkdir $dist or die "Cannot mkdir '$dist': $!";
     chdir $dist or die $!;
-    $skelton->write_assets;
-    # copy customized Kossy
-    $skelton->copy_shared_files('extlib');
+    # copy modified Kossy in extlib
+    foreach (qw(config extlib public)) {
+	$skelton->copy_shared_files($_);
+    }
+    
     $skelton->render_file('app.psgi', 'app.psgi');
     $skelton->render_file('lib/<<PATH>>.pm', 'lib/__PATH__.pm');
     $skelton->render_file('lib/<<PATH>>/Web.pm', 'lib/__PATH__/Web.pm');
