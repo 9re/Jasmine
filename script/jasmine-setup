@@ -14,7 +14,6 @@ use Encode;
 use File::Basename;
 use Jasmine;
 use Jasmine::Setup::Skelton;
-use Data::Dumper;
 
 GetOptions(
     'help' => \my $help,
@@ -41,7 +40,7 @@ sub main {
     mkdir $dist or die "Cannot mkdir '$dist': $!";
     chdir $dist or die $!;
     # copy modified Kossy in extlib
-    foreach (qw(config extlib public)) {
+    foreach (qw(config extlib public views)) {
 	$skelton->copy_shared_files($_);
     }
     
@@ -52,6 +51,7 @@ sub main {
     $skelton->render_file('lib/<<PATH>>/Model/DB.pm', 'lib/__PATH__/Model/DB.pm');
     $skelton->render_file('lib/<<PATH>>/Model/DB/Schema.pm', 'lib/__PATH__/Model/DB/Schema.pm');
     #
+    $skelton->mkpath('tmp/session');
 
     exit(0);
 }
@@ -63,4 +63,3 @@ sub main {
 =cut
 
 1;
-__DATA__

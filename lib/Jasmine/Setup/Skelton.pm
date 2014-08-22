@@ -127,7 +127,7 @@ sub copy_shared_files {
 	my $dest = "$target_dir/$file";
 	my $dirname = dirname($dest);
 	$self->mkpath($dirname) unless -d $dirname;
-	File::Copy::copy("$public_dir/", $dest);
+	File::Copy::copy("$public_dir/$file", $dest);
     }
 }
 
