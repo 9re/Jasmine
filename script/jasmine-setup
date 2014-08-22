@@ -48,6 +48,9 @@ sub main {
     $skelton->render_file('app.psgi', 'app.psgi');
     $skelton->render_file('lib/<<PATH>>.pm', 'lib/__PATH__.pm');
     $skelton->render_file('lib/<<PATH>>/Web.pm', 'lib/__PATH__/Web.pm');
+    $skelton->render_file('lib/<<PATH>>/Container.pm', 'lib/__PATH__/Container.pm');
+    $skelton->render_file('lib/<<PATH>>/Model/DB.pm', 'lib/__PATH__/Model/DB.pm');
+    $skelton->render_file('lib/<<PATH>>/Model/DB/Schema.pm', 'lib/__PATH__/Model/DB/Schema.pm');
     #
 
     exit(0);
