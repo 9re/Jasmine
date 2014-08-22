@@ -49,6 +49,7 @@ sub main {
     $skelton->render_file('lib/<<PATH>>/Web.pm', 'lib/__PATH__/Web.pm');
     $skelton->render_file('lib/<<PATH>>/Container.pm', 'lib/__PATH__/Container.pm');
     $skelton->render_file('lib/<<PATH>>/Model/DB.pm', 'lib/__PATH__/Model/DB.pm');
+    $skelton->render_file('lib/<<PATH>>/Model/Password.pm', 'lib/__PATH__/Model/Password.pm');
     $skelton->render_file('lib/<<PATH>>/Model/DB/Schema.pm', 'lib/__PATH__/Model/DB/Schema.pm');
     #
     $skelton->mkpath('tmp/session');
