@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use utf8;
 use Jasmine;
+use <: $module :>::Container qw/model/;
 
 enable_filter qw/session anti_csrf require_user/;
 filter_option

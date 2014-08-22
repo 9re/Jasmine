@@ -1,5 +1,7 @@
-package <: $model :>::Model::Password;
-use <: $model :>::Container;
+package <: $module :>::Model::Password;
+use strict;
+use warnings;
+use <: $module :>::Container;
 use Digest::SHA qw/hmac_sha256_hex/;
 
 sub new { bless {}, +shift }

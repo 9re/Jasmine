@@ -3,16 +3,9 @@
 use strict;
 use warnings;
 use utf8;
-use File::Path qw/mkpath/;
 use Getopt::Long;
 use Pod::Usage;
-use Text::Xslate;
 use File::ShareDir qw//;
-use File::Copy;
-use MIME::Base64;
-use Encode;
-use File::Basename;
-use Jasmine;
 use Jasmine::Setup::Skelton;
 
 GetOptions(
@@ -34,16 +27,18 @@ sub show_version {
 sub main {
     my $module = shift @ARGV or pod2usage(0);
     my $skelton = Jasmine::Setup::Skelton->new(module => $module);
-    print Dumper $skelton;
     
     my $dist = $skelton->{dist};
     mkdir $dist or die "Cannot mkdir '$dist': $!";
     chdir $dist or die $!;
-    # copy modified Kossy in extlib
+
+    # copy files in dir
+    # modified Kossy is in extlib
     foreach (qw(config extlib public views)) {
 	$skelton->copy_shared_files($_);
     }
-    
+
+    # prepare skelton classes
     $skelton->render_file('app.psgi', 'app.psgi');
     $skelton->render_file('lib/<<PATH>>.pm', 'lib/__PATH__.pm');
     $skelton->render_file('lib/<<PATH>>/Web.pm', 'lib/__PATH__/Web.pm');
@@ -51,7 +46,8 @@ sub main {
     $skelton->render_file('lib/<<PATH>>/Model/DB.pm', 'lib/__PATH__/Model/DB.pm');
     $skelton->render_file('lib/<<PATH>>/Model/Password.pm', 'lib/__PATH__/Model/Password.pm');
     $skelton->render_file('lib/<<PATH>>/Model/DB/Schema.pm', 'lib/__PATH__/Model/DB/Schema.pm');
-    #
+    
+    # prepare empty dir
     $skelton->mkpath('tmp/session');
 
     exit(0);
