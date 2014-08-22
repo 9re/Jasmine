@@ -15,7 +15,14 @@ register conf => sub {
 register db => sub {
     my $self = shift;
     $self->load_class('<: $module :>::Model::DB');
-    <: $module :>::Model::DB->new($self->get('conf')->{'Teng'});
+    <: $module :>::Model::DB->new($self->get('conf')->{Teng});
+};
+
+register imagemagick => sub {
+    my $self = shift;
+    require Jasmine::Util::ImageMagick;
+    Jasmine::Util::ImageMagick->new(
+	$self->get('conf')->{ImageMagick});
 };
 
 1;

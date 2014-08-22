@@ -9,4 +9,8 @@
 	suffix => '',
 	salt => ''
     },
+    'ImageMagick' => +{
+	path => 'files/images',
+	web_path => 'static/images'
+    }
 };

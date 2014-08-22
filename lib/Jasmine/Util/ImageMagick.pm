@@ -1,4 +1,4 @@
-package Jasmine::Model::ImageMagick;
+package Jasmine::Util::ImageMagick;
 use strict;
 use warnings;
 
