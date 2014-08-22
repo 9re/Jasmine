@@ -8,17 +8,19 @@ use Class::Accessor::Lite (
 );
 use File::Path ();
 use Image::Magick;
-use UUID::Random::generate;
+use UUID::Random;
 
-sub handle_params {
-    my ($self, $req, $params, $width, $height) = @_;
+use Data::Dumper;
+
+sub handle_uploads {
+    my ($self, $req, $image_params, $width, $height) = @_;
     my $params = {};
-    foreach my $param(@$params) {
+    foreach my $param(@$image_params) {
 	my $image = $req->upload($param);
 	if ($image) {
 	    my $uploaded = $self->create_thumbnail($image->tempname, $width, $height);
 	    if ($uploaded) {
-		$uploaded =~ s|$root_dir|/$self->{web_path}|;
+		$uploaded =~ s|$self->{path}|/$self->{web_path}|;
 		$params->{$param} = $uploaded;
 	    }
 	}
@@ -38,7 +40,7 @@ sub create_thumbnail {
 	my $file = "$dir/$name.jpg";
 	#`convert -resize 640x640 $path $file`;
 	$im->Read($path);
-	$im->Resize(width => $width, height => $height);
+	$im->Resize(geometry => "${width}x${height}");
 	$im->Write($file);
 
 	return -f $file ? $file : undef;

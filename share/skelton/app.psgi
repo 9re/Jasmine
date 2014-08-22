@@ -26,7 +26,7 @@ builder {
         );
     ;
     enable 'Static',
-        path => qr!^/(?:(?:css|js|img)/|favicon\.ico$)!,
+        path => qr!^/(?:(?:css|fonts|js|images)/|favicon\.ico$)!,
         root => $root_dir . '/public';
     $app;
 };
