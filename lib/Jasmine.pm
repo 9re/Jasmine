@@ -10,7 +10,7 @@ use Try::Tiny;
 
 our $VERSION = "0.01";
 our @EXPORT = qw/new root_dir psgi build_app _router _connect get post router filter _wrap_filter
-                 enable_filter filter_option/;
+                 enable_filter filter_option set_session_vars get_session_var/;
 our @ISA = qw/Kossy Exporter/;
 
 my $_FILTER_OPTIONS = {};
@@ -38,6 +38,18 @@ my $_FILTERS = {
 	    $app->($self, $c);
 	};
     },
+    get_user => sub {
+	my ($app) = @_;
+	sub {
+	    my ($self, $c) = @_;
+
+	    my $user_id = $c->req->env->{'psgix.session'}->{user_id};
+	    my $user = $_FILTER_OPTIONS->{get_user}->{get_user_sub}->($user_id);
+	    $c->stash->{user} = $user;
+	    $c->res->header('Cache-Control', 'private') if $user;
+	    $app->($self, $c);
+	}
+    },
     require_user => sub {
 	my ($app) = @_;
 	sub {
@@ -64,6 +76,20 @@ sub filter_option {
     while (my ($filter, $options) = each %args) {
 	$_FILTER_OPTIONS->{$filter} = $options;
     }
+}
+
+sub set_session_vars {
+    my ($self, $c, $vars) = @_;
+
+    my $session = $c->req->env->{"psgix.session"};
+    while (my ($key, $value) = each %$vars) {
+	$session->{$key} = $value;
+    }
+}
+
+sub get_session_var {
+    my ($self, $c, $name) = @_;
+    return $c->req->env->{"psgix.session"}->{$name};
 }
 
 
