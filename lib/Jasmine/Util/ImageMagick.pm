@@ -4,7 +4,7 @@ use warnings;
 
 use Class::Accessor::Lite (
     new => 1,
-    r => [qw/path web_path/]
+    r => [qw/path web_path max_width max_height/]
 );
 use File::Path ();
 use Image::Magick;
@@ -16,7 +16,7 @@ sub handle_uploads {
     my ($self, $req, $image_params, $width, $height) = @_;
     my $params = {};
     foreach my $param(@$image_params) {
-	my $image = $req->upload($param);
+	my $image = $req->uploads->{$param};
 	if ($image) {
 	    my $uploaded = $self->create_thumbnail($image->tempname, $width, $height);
 	    if ($uploaded) {
@@ -34,18 +34,36 @@ sub create_thumbnail {
     if (-f $path) {
 	my $im = Image::Magick->new;
 	my $name = UUID::Random::generate;
+	warn "$path $name";
 	$name =~ m/((.).)/;
 	my $dir = "$self->{path}/$2/$1";
 	File::Path::mkpath($dir);
 	my $file = "$dir/$name.jpg";
-	#`convert -resize 640x640 $path $file`;
+	warn "$path $name $dir $file";
 	$im->Read($path);
+	my($image_width, $image_height, $format) = $im->Get('width', 'height', 'format');
+	warn "image: <$format> $image_width x $image_height";
+	if ($width) {
+	    $width = $width > $image_width ? $image_width : $width;
+	    $width = $width > $self->{max_width} ? $self->{max_width} : $width;
+	} else {
+	    $width = $self->{max_width};
+	}
+	if ($height) {
+	    $height = $height > $image_height ? $image_height : $height;
+	    $height = $height > $self->{max_height} ? $self->{max_height} : $height;
+	} else {
+	    $height = $self->{max_height};
+	}
 	$im->Resize(geometry => "${width}x${height}");
-	$im->Write($file);
+	$im->Set(quality=>90);
+	$im->Write("jpg:$file");
+	undef $im;
 
 	return -f $file ? $file : undef;
+    } else {
+	warn "$path does not exists!\n";
     }
 }
-
 
 1;

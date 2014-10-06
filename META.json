@@ -44,6 +44,10 @@
          "requires" : {
             "Kossy" : "0.38",
             "Kossy::Validator" : "0.01",
+            "Object::Container::Exporter" : "0.03",
+            "Plack::Middleware::Debug" : "0.16",
+            "Plack::Session::Store::File" : "0.24",
+            "Teng" : "0.25",
             "parent" : "0",
             "perl" : "5.008004"
          }
