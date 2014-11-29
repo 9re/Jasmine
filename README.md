@@ -1,6 +1,6 @@
 # NAME
 
-Jasmine - It's new $module
+Jasmine
 
 # SYNOPSIS
 
@@ -8,7 +8,7 @@ Jasmine - It's new $module
 
 # DESCRIPTION
 
-Jasmine is ...
+Jasmine is a handy extension on Kossy with some nice utils and filters.
 
 # LICENSE
 
