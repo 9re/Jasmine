@@ -6,6 +6,8 @@ requires 'Object::Container::Exporter', '0.03';
 requires 'Plack::Middleware::Debug', '0.16';
 requires 'Plack::Session::Store::File', '0.24';
 requires 'Teng', '0.25';
+requires 'Email::MIME', '1.926';
+requires 'Email::Sender::Simple', '> 1.3';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
