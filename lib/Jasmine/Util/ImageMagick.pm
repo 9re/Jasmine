@@ -29,7 +29,7 @@ sub handle_uploads {
 }
 
 sub create_thumbnail {
-    my ($self, $path, $width, $height) = @_;
+    my ($self, $path, $width, $height, $force_resize) = @_;
 
     if (-f $path) {
 	my $im = Image::Magick->new;
@@ -44,16 +44,20 @@ sub create_thumbnail {
 	my($image_width, $image_height, $format) = $im->Get('width', 'height', 'format');
 	warn "image: <$format> $image_width x $image_height";
 	if ($width) {
-	    $width = $width > $image_width ? $image_width : $width;
+	    if (!$force_resize) {
+		$width = $width > $image_width ? $image_width : $width;
+	    }
 	    $width = $width > $self->{max_width} ? $self->{max_width} : $width;
 	} else {
-	    $width = $self->{max_width};
+	    $width = $image_width > $self->{max_width} ? $self->{max_width} : $image_width;
 	}
 	if ($height) {
-	    $height = $height > $image_height ? $image_height : $height;
+	    if (!$force_resize) {
+		$height = $height > $image_height ? $image_height : $height;
+	    }
 	    $height = $height > $self->{max_height} ? $self->{max_height} : $height;
 	} else {
-	    $height = $self->{max_height};
+	    $height = $image_height > $self->{max_height} ? $self->{max_height} : $image_height;
 	}
 	$im->Resize(geometry => "${width}x${height}");
 	$im->Set(quality=>90);
