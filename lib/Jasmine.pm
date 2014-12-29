@@ -8,7 +8,7 @@ use Kossy;
 use Data::Dumper;
 use Try::Tiny;
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 our @EXPORT = qw/new root_dir psgi build_app _router _connect get post router filter _wrap_filter
                  enable_filter filter_option set_session_vars get_session_var/;
 our @ISA = qw/Kossy Exporter/;

@@ -34,7 +34,6 @@ sub create_thumbnail {
     if (-f $path) {
 	my $im = Image::Magick->new;
 	my $name = UUID::Random::generate;
-	warn "$path $name";
 	$name =~ m/((.).)/;
 	my $dir = "$self->{path}/$2/$1";
 	File::Path::mkpath($dir);
@@ -60,6 +59,7 @@ sub create_thumbnail {
 	    $height = $image_height > $self->{max_height} ? $self->{max_height} : $image_height;
 	}
 	$im->Resize(geometry => "${width}x${height}");
+	$im->AutoOrient;
 	$im->Set(quality=>90);
 	$im->Write("jpg:$file");
 	undef $im;
